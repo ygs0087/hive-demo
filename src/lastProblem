@@ -1,0 +1,51 @@
+-- 找出影评次数最多的女士所给出最高分的 10 部电影的平均影评分，展示电影名和平均影评分（可使用多行 SQL）。
+
+select m.moviename as name, avg(r.rate) as avgrate
+from t_rating_ygs r
+         join t_movie_ygs m on r.movieid = m.movieid
+         join (
+    select r.movieid
+    from t_rating_ygs r
+             join (select u.userid, count(1) as num
+                   from t_user_ygs u
+                            join t_rating_ygs r on u.userid = r.userid
+                   where u.sex = 'F'
+                   group by u.userid
+                   order by num desc limit 1) u on r.userid = u.userid
+    order by r.rate desc, movieid limit 10
+) mm on r.movieid = mm.movieid
+group by m.moviename;
+
+-- 返回结果
+-- Query ID = student1_20220403223428_de744059-da9c-44a0-b2f6-7b1bb008577f
+-- Total jobs = 1
+-- Launching Job 1 out of 1
+-- Status: Running (Executing on YARN cluster with App id application_1645699879292_1990)
+--
+-- ----------------------------------------------------------------------------------------------
+--         VERTICES      MODE        STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+-- ----------------------------------------------------------------------------------------------
+-- Map 3 .......... container     SUCCEEDED      1          1        0        0       0       0
+-- Map 9 .......... container     SUCCEEDED      1          1        0        0       0       0
+-- Map 6 .......... container     SUCCEEDED      1          1        0        0       0       0
+-- Reducer 7 ...... container     SUCCEEDED      4          4        0        0       0       0
+-- Reducer 8 ...... container     SUCCEEDED      1          1        0        0       0       0
+-- Map 4 .......... container     SUCCEEDED      1          1        0        0       0       0
+-- Reducer 5 ...... container     SUCCEEDED      1          1        0        0       0       0
+-- Map 1 .......... container     SUCCEEDED      1          1        0        0       0       0
+-- Reducer 2 ...... container     SUCCEEDED      6          6        0        0       0       0
+-- ----------------------------------------------------------------------------------------------
+-- VERTICES: 09/09  [==========================>>] 100%  ELAPSED TIME: 16.04 s
+-- ----------------------------------------------------------------------------------------------
+-- OK
+-- Star Wars: Episode IV - A New Hope (1977)	4.453694416583082
+-- Death and the Maiden (1994)	3.5
+-- Living in Oblivion (1995)	3.9170731707317072
+-- Professional, The (a.k.a. Leon: The Professional) (1994)	4.106175514626218
+-- Swimming with Sharks (1995)	3.712918660287081
+-- Three Colors: Red (1994)	4.227544910179641
+-- Crumb (1994)	4.063136456211812
+-- Shallow Grave (1994)	3.8937728937728937
+-- Three Colors: Blue (1993)	4.098765432098766
+-- City of Lost Children, The (1995)	4.062034739454094
+-- Time taken: 18.441 seconds, Fetched: 10 row(s)

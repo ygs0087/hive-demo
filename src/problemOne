@@ -1,0 +1,33 @@
+-- 展示电影 ID 为 2116 这部电影各年龄段的平均影评分
+
+select b.age as age, avg(a.rate) as avgrate
+from t_rating_ygs as a
+         join t_user_ygs as b on a.userid = b.userid
+where a.movieid = 2116
+group by b.age;
+
+
+-- 返回结果：
+-- Query ID = student1_20220403223152_f93a6dbb-a531-4d17-9f18-6dbb58088d54
+-- Total jobs = 1
+-- Launching Job 1 out of 1
+-- Status: Running (Executing on YARN cluster with App id application_1645699879292_1990)
+--
+-- ----------------------------------------------------------------------------------------------
+--         VERTICES      MODE        STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+-- ----------------------------------------------------------------------------------------------
+-- Map 3 .......... container     SUCCEEDED      1          1        0        0       0       0
+-- Map 1 .......... container     SUCCEEDED      1          1        0        0       0       0
+-- Reducer 2 ...... container     SUCCEEDED      2          2        0        0       0       0
+-- ----------------------------------------------------------------------------------------------
+-- VERTICES: 03/03  [==========================>>] 100%  ELAPSED TIME: 9.64 s
+-- ----------------------------------------------------------------------------------------------
+-- OK
+-- 1	3.2941176470588234
+-- 18	3.3580246913580245
+-- 25	3.436548223350254
+-- 35	3.2278481012658227
+-- 45	2.8275862068965516
+-- 50	3.32
+-- 56	3.5
+-- Time taken: 12.634 seconds, Fetched: 7 row(s)
